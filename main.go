@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"rendipilot/simple-golang/database"
 	"rendipilot/simple-golang/handlers"
@@ -18,7 +19,7 @@ func main() {
 		log.Fatal("Failed to connect to PostgreSQL:", err) 
 	} 
 
-	defer db.Close()
+	defer db.Close(context.Background())
 
 	// endpoint
 

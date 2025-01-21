@@ -1,15 +1,16 @@
 package data
 
 import (
-	"rendipilot/simple-golang/models"
+    "context"
+    "rendipilot/simple-golang/models"
 
-	"github.com/jmoiron/sqlx"
+    "github.com/jackc/pgx/v5"
 )
 
-var db *sqlx.DB
+var db *pgx.Conn
 
 func CreateUserDatabase(user *models.User) error {
-	query := `INSER INTO users (name, email, password) VALUES (:name, :email, :password)`
-	_, err := db.NamedExec(query, user)
-	return err
+    query := `INSERT INTO users (name, email, password) VALUES ($1, $2, $3)`
+    _, err := db.Exec(context.Background(), query, user.Name, user.Email, user.Password)
+    return err
 }

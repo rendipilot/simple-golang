@@ -1,31 +1,32 @@
 package database
 
 import (
-	"fmt"
-	"os"
+    "context"
+    "fmt"
+    "os"
 
-	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
+    "github.com/jackc/pgx/v5"
 )
 
-func ConnectDatabase() (*sqlx.DB, error){
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT") 
-	dbUser := os.Getenv("DB_USER") 
-	dbPassword := os.Getenv("DB_PASSWORD") 
-	dbName := os.Getenv("DB_NAME")
 
-	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, dbUser,dbPassword,dbName)
-	db, err := sqlx.Connect("postgres", connStr)
+func ConnectDatabase() (*pgx.Conn, error) {
+    dbHost := os.Getenv("DB_HOST")
+    dbPort := os.Getenv("DB_PORT")
+    dbUser := os.Getenv("DB_USER")
+    dbPassword := os.Getenv("DB_PASSWORD")
+    dbName := os.Getenv("DB_NAME")
 
-	if err != nil {
-		return nil, err
-	}
-	
-	err = db.Ping() 
-	if err != nil { 
-		return nil, err 
-	} 
-	
-	return db, nil
+    connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", dbUser, dbPassword, dbHost, dbPort, dbName)
+    conn, err := pgx.Connect(context.Background(), connStr)
+
+    if err != nil {
+        return nil, err
+    }
+
+    err = conn.Ping(context.Background())
+    if err != nil {
+        return nil, err
+    }
+
+    return conn, nil
 }
