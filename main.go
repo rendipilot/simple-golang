@@ -7,7 +7,7 @@ import (
 	"rendipilot/simple-golang/handlers"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 )
 
 func main() {
