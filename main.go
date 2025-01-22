@@ -14,13 +14,13 @@ func main() {
 	app := fiber.New()
 
 	// Load environment variables
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	log.Fatal("Error loading .env file")
+	// }
 
 	// Initialize database connection ONCE
-	_, err = database.ConnectDatabase() 
+	_, err := database.ConnectDatabase() 
 	if err != nil { 
 		log.Fatal("Failed to connect to PostgreSQL:", err) 
 	} 
