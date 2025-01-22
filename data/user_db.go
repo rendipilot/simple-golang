@@ -22,8 +22,10 @@ func CreateUserDatabase(user *models.User) error {
             return err
         }
 
+		passwordStr := string(hashedPassword)
+
 		query := `INSERT INTO users (name, email, password) VALUES ($1, $2, $3)`
-		_, err = db.Exec(context.Background(), query, user.Name, user.Email, hashedPassword)
+		_, err = db.Exec(context.Background(), query, user.Name, user.Email, passwordStr)
 		return err
 	}
 
