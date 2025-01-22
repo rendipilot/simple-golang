@@ -42,6 +42,8 @@ func main() {
 
 	app.Post("/adduser", handlers.AddUser)
 
+	app.Get("/users", handlers.GetUsers)
+
 	// Start the server
 	app.Listen(":3000")
 }
