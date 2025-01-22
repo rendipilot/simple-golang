@@ -36,6 +36,10 @@ func main() {
 		return c.SendString("Hello Rendy")
 	})
 
+	app.Get("/test", func(c *fiber.Ctx) error {
+		return c.SendString("Test")
+	})
+
 	app.Post("/adduser", handlers.AddUser)
 
 	// Start the server
