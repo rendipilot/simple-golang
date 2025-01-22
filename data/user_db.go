@@ -1,16 +1,21 @@
 package data
 
 import (
-    "context"
-    "rendipilot/simple-golang/models"
-
-    "github.com/jackc/pgx/v5"
+	"context"
+	"log"
+	"rendipilot/simple-golang/database"
+	"rendipilot/simple-golang/models"
 )
 
-var db *pgx.Conn
-
 func CreateUserDatabase(user *models.User) error {
-    query := `INSERT INTO users (name, email, password) VALUES ($1, $2, $3)`
-    _, err := db.Exec(context.Background(), query, user.Name, user.Email, user.Password)
-    return err
+	db := database.GetDB()
+	if db == nil {
+		log.Println("database connection is not initialized")
+		return nil
+	} else {
+		query := `INSERT INTO users (name, email, password) VALUES ($1, $2, $3)`
+		_, err := db.Exec(context.Background(), query, user.Name, user.Email, user.Password)
+		return err
+	}
+
 }

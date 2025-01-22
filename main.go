@@ -7,32 +7,37 @@ import (
 	"rendipilot/simple-golang/handlers"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 )
 
 func main() {
 	app := fiber.New()
 
-	// connection to postgresql
-	db, err := database.ConnectDatabase()
+	// Load environment variables
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
+	// Initialize database connection ONCE
+	_, err = database.ConnectDatabase() 
 	if err != nil { 
 		log.Fatal("Failed to connect to PostgreSQL:", err) 
 	} 
 
-	defer db.Close(context.Background())
+	defer database.GetDB().Close(context.Background()) 
 
-	// endpoint
-
+	// Define endpoints
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
 	})
 
 	app.Get("/user", func(c *fiber.Ctx) error {
-		return c.SendString("hello rendy")
+		return c.SendString("Hello Rendy")
 	})
 
 	app.Post("/adduser", handlers.AddUser)
 
-	// listen to port 3000 machine
+	// Start the server
 	app.Listen(":3000")
 }

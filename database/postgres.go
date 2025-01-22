@@ -1,32 +1,42 @@
 package database
 
 import (
-    "context"
-    "fmt"
-    "os"
+	"context"
+	"fmt"
+	"os"
+	"sync"
 
-    "github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5"
 )
 
+var (
+    db   *pgx.Conn
+    once sync.Once
+)
 
 func ConnectDatabase() (*pgx.Conn, error) {
-    dbHost := os.Getenv("DB_HOST")
-    dbPort := os.Getenv("DB_PORT")
-    dbUser := os.Getenv("DB_USER")
-    dbPassword := os.Getenv("DB_PASSWORD")
-    dbName := os.Getenv("DB_NAME")
+	var err error
 
-    connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", dbUser, dbPassword, dbHost, dbPort, dbName)
-    conn, err := pgx.Connect(context.Background(), connStr)
+	once.Do(func() {
+		dbHost := os.Getenv("DB_HOST")
+		dbPort := os.Getenv("DB_PORT")
+		dbUser := os.Getenv("DB_USER")
+		dbPassword := os.Getenv("DB_PASSWORD")
+		dbName := os.Getenv("DB_NAME")
 
-    if err != nil {
-        return nil, err
-    }
+		connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", dbUser, dbPassword, dbHost, dbPort, dbName)
+		db, err = pgx.Connect(context.Background(), connStr)
+		
+		if err != nil {
+			return
+		}
 
-    err = conn.Ping(context.Background())
-    if err != nil {
-        return nil, err
-    }
+		err = db.Ping(context.Background())
+	})
 
-    return conn, nil
+	return db, err
+}
+
+func GetDB() *pgx.Conn {
+    return db
 }
