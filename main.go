@@ -32,7 +32,7 @@ func main() {
 		AllowOrigins:   "*",
 		AllowMethods:   "GET,POST,HEAD,PUT,DELETE,PATCH", // Allow all methods
 		AllowHeaders:   "",
-		AllowCredentials: true,
+		AllowCredentials: false,
 	})
 
 	app.Use(config)
