@@ -6,8 +6,8 @@ import (
 	"rendipilot/simple-golang/database"
 	"rendipilot/simple-golang/handlers"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	// "github.com/joho/godotenv"
 )
 
@@ -28,10 +28,10 @@ func main() {
 
 	defer database.GetDB().Close(context.Background())
 
-	config := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"}, // Allow all methods
-		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+	config := cors.New(cors.Config{
+		AllowOrigins:   "*",
+		AllowMethods:   "GET,POST,HEAD,PUT,DELETE,PATCH", // Allow all methods
+		AllowHeaders:   "",
 		AllowCredentials: true,
 	})
 
