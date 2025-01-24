@@ -29,10 +29,10 @@ func main() {
 	defer database.GetDB().Close(context.Background())
 
 	config := cors.New(cors.Config{
-		AllowOrigins:   "http://localhost:3000",
+		AllowOrigins:   "*",
 		AllowMethods:   "GET,POST,HEAD,PUT,DELETE,PATCH", // Allow all methods
 		AllowHeaders:   "",
-		AllowCredentials: true,
+		AllowCredentials: false,
 	})
 
 	app.Use(config)

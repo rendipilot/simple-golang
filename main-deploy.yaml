@@ -28,7 +28,7 @@ kind: Service
 metadata: 
   name: golang-service
 spec:
-  type: NodePort 
+  type: LoadBalancer 
   selector: 
     app: golang
   ports: 
